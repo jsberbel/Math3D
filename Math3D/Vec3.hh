@@ -1,51 +1,70 @@
-#pragma once
+﻿#pragma once
 #include <iostream>
 
 // Vector 3D class
-class Vec3 {
+template<class T>
+class TVec3 {
 public:
 	// Default constructor
-	Vec3() : x(0.f), y(0.f), z(0.f) {};
+	TVec3() : x(0), y(0), z(0) {};
 	// Overloaded constructor
-	Vec3(float val) : x(val), y(val), z(val) {};
-	Vec3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {};
+	TVec3(T val) : x(val), y(val), z(val) {};
+	TVec3(T _x, T _y, T _z) : x(_x), y(_y), z(_z) {};
 	// Copy constructor
-	Vec3(const Vec3 &cpy) = default;
-	Vec3& operator=(const Vec3& cpy) = default;
+	TVec3(const TVec3 &cpy) = default;
+	TVec3& operator=(const TVec3& cpy) = default;
 	// Move constructor
-	Vec3(Vec3 &&mov) = default;
-	Vec3& operator=(Vec3&& mov) = default;
+	TVec3(TVec3 &&mov) = default;
+	TVec3& operator=(TVec3&& mov) = default;
 	// Destructor
-	~Vec3() = default;
+	~TVec3() = default;
 	// Internal operators
 	void operator*=(float scalar);
 	void operator/=(float scalar);
-	void operator+=(const Vec3 &rhs);
-	void operator-=(const Vec3 &rhs);
+	void operator+=(const TVec3 &rhs);
+	void operator-=(const TVec3 &rhs);
+	T &operator[](unsigned i);
 	// Methods
-	float length();
-	Vec3 normalize();
+	T length();
+	TVec3<T> normalize();
 public:
 	// Attributes
-	float x, y, z;
-	static const Vec3 ZERO;
+	union {
+		T v[3];
+		struct { T x, y, z; };
+		struct { T r, g, b; };
+		struct { T s, t, p; };
+	};
+	static const TVec3 ZERO;
 };
 
+////////////////////////////
 // Vector external operators
-Vec3 operator*(const Vec3 &vec, float scalar);
-Vec3 operator*(float scalar, const Vec3 &vec);
-Vec3 operator/(const Vec3 &vec, float scalar);
-Vec3 operator/(float scalar, const Vec3 &vec);
-float operator*(const Vec3 &lhs, const Vec3 &rhs);
-Vec3 operator+(const Vec3 &lhs, const Vec3 &rhs);
-Vec3 operator-(const Vec3 &lhs, const Vec3 &rhs);
-std::ostream& operator<<(std::ostream &os, const Vec3 &vec);
+template<class T> TVec3<T> operator*(const TVec3<T> &vec, float scalar);
+template<class T> TVec3<T> operator*(float scalar, const TVec3<T> &vec);
+template<class T> TVec3<T> operator/(const TVec3<T> &vec, float scalar);
+template<class T> TVec3<T> operator/(float scalar, const TVec3<T> &vec);
+template<class T> T operator*(const TVec3<T> &lhs, const TVec3<T> &rhs);
+template<class T> TVec3<T> operator+(const TVec3<T> &lhs, const TVec3<T> &rhs);
+template<class T> TVec3<T> operator-(const TVec3<T> &lhs, const TVec3<T> &rhs);
 
+///////////////////////////
 // Vector external methods
-float Dot(const Vec3 &P, const Vec3 &Q);
-Vec3 Cross(const Vec3 &P, const Vec3 &Q);
-float Distance(const Vec3 &P, const Vec3 &Q);		// Get the distance between 2 points or directions
-bool AreOrthogonal(const Vec3 &P, const Vec3 &Q);	// Whether or not 2 vectors are perpendicular
-bool SameSide(const Vec3 &P, const Vec3 &Q);		// Whether or not 2 vectors lie on the same side of a plane
-Vec3 Projection(Vec3 &P, Vec3 &Q);						// Vector projection of P onto Q
-Vec3 Perpendicular(Vec3 &P, Vec3 &Q);					// Vector perpendicular of P with respect to Q
+template<class T> float Dot(const TVec3<T> &P, const TVec3<T> &Q);			// P * Q = ||P|| * ||Q|| * cos α
+template<class T> TVec3<T> Cross(const TVec3<T> &P, const TVec3<T> &Q);		// ||P x Q|| = ||P|| * ||Q|| * sin α
+template<class T> float Distance(const TVec3<T> &P, const TVec3<T> &Q);		// Get the distance between 2 points or directions
+template<class T> bool AreOrthogonal(const TVec3<T> &P, const TVec3<T> &Q);	// Whether or not 2 vectors are perpendicular
+template<class T> bool SameSide(const TVec3<T> &P, const TVec3<T> &Q);		// Whether or not 2 vectors lie on the same side of a plane
+template<class T> TVec3<T> Projection(TVec3<T> &P, TVec3<T> &Q);			// Vector projection of P onto Q
+template<class T> TVec3<T> Perpendicular(TVec3<T> &P, TVec3<T> &Q);			// Vector perpendicular of P with respect to Q
+template<class T> float TriangleArea(TVec3<T> &P, TVec3<T> &Q);				// Get the area of the triangle formed by P and Q
+
+/////////////////////////
+// Vector specialization
+typedef TVec3<int> iVec3;
+typedef TVec3<float> Vec3;
+typedef TVec3<unsigned> uVec3;
+
+#ifndef EXTERNAL_TEMPLATE
+#include "Vec3.inl"
+#endif //EXTERNAL_TEMPLATE
