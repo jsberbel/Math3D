@@ -19,8 +19,8 @@ public:
 	// Destructor
 	~TVec3() = default;
 	// Internal operators
-	void operator*=(float scalar);
-	void operator/=(float scalar);
+	void operator*=(T scalar);
+	void operator/=(T scalar);
 	void operator+=(const TVec3 &rhs);
 	void operator-=(const TVec3 &rhs);
 	T &operator[](unsigned i);
@@ -40,13 +40,14 @@ public:
 
 ////////////////////////////
 // Vector external operators
-template<class T> TVec3<T> operator*(const TVec3<T> &vec, float scalar);
+template<class T> TVec3<T> operator*(const TVec3<T> &vec, T scalar);
 template<class T> TVec3<T> operator*(float scalar, const TVec3<T> &vec);
-template<class T> TVec3<T> operator/(const TVec3<T> &vec, float scalar);
-template<class T> TVec3<T> operator/(float scalar, const TVec3<T> &vec);
+template<class T> TVec3<T> operator/(const TVec3<T> &vec, T scalar);
+template<class T> TVec3<T> operator/(T scalar, const TVec3<T> &vec);
 template<class T> T operator*(const TVec3<T> &lhs, const TVec3<T> &rhs);
 template<class T> TVec3<T> operator+(const TVec3<T> &lhs, const TVec3<T> &rhs);
 template<class T> TVec3<T> operator-(const TVec3<T> &lhs, const TVec3<T> &rhs);
+template<class T> std::ostream& operator<<(std::ostream &os, const TVec3<T> &vec);
 
 ///////////////////////////
 // Vector external methods
@@ -64,7 +65,3 @@ template<class T> float TriangleArea(TVec3<T> &P, TVec3<T> &Q);				// Get the ar
 typedef TVec3<int> iVec3;
 typedef TVec3<float> Vec3;
 typedef TVec3<unsigned> uVec3;
-
-#ifndef EXTERNAL_TEMPLATE
-#include "Vec3.inl"
-#endif //EXTERNAL_TEMPLATE

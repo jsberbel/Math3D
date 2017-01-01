@@ -6,7 +6,7 @@ int main() {
 	// VECTORS
 	// -------
 
-	Vec3 v{ 2.f, 4.f, 1.f };
+	Vec3 v(2.f, 4.f, 5.f);
 	std::cout << v << std::endl;
 
 	system("pause");
